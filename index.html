@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pathways Adaptive Learning</title>
+<style>
+:root{
+ --ink:#1d2b3a;--muted:#687789;--line:#e4eaf0;--bg:#f5f7fb;--white:#fff;
+ --blue:#3568bd;--blue2:#eaf1ff;--green:#17865f;--green2:#e7f7ef;
+ --coral:#c65a54;--coral2:#fff0ee;--gold:#a87512;--gold2:#fff6dc;
+ --purple:#7354b8;--purple2:#f0ebff;--shadow:0 12px 32px rgba(31,52,79,.08);
+}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
+button,select{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 16px;font-weight:700;transition:.15s}
+button:hover{transform:translateY(-1px);filter:brightness(.98)}button:focus-visible,select:focus-visible{outline:3px solid #91b8ff;outline-offset:2px}
+.primary{background:var(--blue);color:white}.secondary{background:var(--blue2);color:var(--blue)}.quiet{background:#f0f3f7;color:#45566b}.green{background:var(--green);color:white}.coral{background:var(--coral2);color:var(--coral)}
+.app{min-height:100vh}.topbar{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(18px,4vw,58px);position:sticky;top:0;z-index:10}
+.brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:-.4px;font-size:20px}.logo{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#3568bd,#6c8ee1);display:grid;place-items:center;color:#fff;font-size:19px}
+.brand small{display:block;color:var(--muted);font-size:10px;font-weight:650;letter-spacing:1.4px;text-transform:uppercase;margin-top:2px}
+.nav{display:flex;gap:8px}.nav button{background:transparent;color:var(--muted);padding:10px 13px}.nav button.active{background:var(--blue2);color:var(--blue)}
+main{max-width:1180px;margin:0 auto;padding:34px 24px 56px}.eyebrow{text-transform:uppercase;letter-spacing:1.5px;font-size:11px;font-weight:800;color:var(--blue);margin-bottom:9px}
+h1{font-size:clamp(28px,4vw,42px);letter-spacing:-1.4px;line-height:1.12;margin:0 0 12px}h2{font-size:23px;letter-spacing:-.5px;margin:0 0 8px}h3{font-size:16px;margin:0 0 7px}p{line-height:1.55;margin:0 0 12px}.muted{color:var(--muted)}.small{font-size:12px}.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:24px;align-items:stretch;margin-bottom:25px}
+.heroCopy{padding:18px 0}.heroCopy p{max-width:650px;font-size:16px;color:var(--muted)}
+.panel,.card{background:var(--white);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}.panel{padding:23px}.card{padding:20px}.heroPanel{padding:23px;background:linear-gradient(145deg,#fff,#edf3ff)}
+.badge{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:6px 10px;font-size:11px;font-weight:800;background:#edf1f6;color:#526276}.badge.blue{background:var(--blue2);color:var(--blue)}.badge.green{background:var(--green2);color:var(--green)}.badge.coral{background:var(--coral2);color:var(--coral)}.badge.gold{background:var(--gold2);color:var(--gold)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.profile{position:relative;overflow:hidden;cursor:pointer;transition:.18s}.profile:hover{transform:translateY(-3px);box-shadow:0 18px 36px rgba(31,52,79,.12)}.profileTop{display:flex;gap:16px;align-items:flex-start}.avatar{width:82px;height:82px;border-radius:24px;display:grid;place-items:center;font-size:42px;flex-shrink:0}.avatar.ara{background:#ffe9e4}.avatar.arj{background:#e2edff}.profile h2{margin:3px 0 6px}.profile ul{padding-left:18px;margin:14px 0 0;color:var(--muted);font-size:13px;line-height:1.7}.profile .bottom{display:flex;justify-content:space-between;align-items:center;margin-top:17px;padding-top:14px;border-top:1px solid var(--line);gap:8px}
+.notice{padding:13px 15px;border-radius:13px;background:#f0f4f9;color:#59697b;font-size:12px;line-height:1.5}.notice strong{color:var(--ink)}.sectionHead{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:30px 0 14px}.sectionHead p{margin:0;color:var(--muted);font-size:13px}
+.pathline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:20px 0}.step{border-radius:10px;background:#f0f3f8;color:#617186;padding:8px 11px;font-size:12px;font-weight:750}.step.done{background:var(--green2);color:var(--green)}.step.current{background:var(--blue2);color:var(--blue)}
+.question{font-size:21px;line-height:1.35;font-weight:750;margin:16px 0 20px}.answers{display:grid;gap:10px}.answer{width:100%;text-align:left;background:#fff;border:1px solid var(--line);padding:15px 16px;color:var(--ink);font-weight:600;display:flex;gap:12px;align-items:center}.answer .letter{width:28px;height:28px;border-radius:9px;background:#f0f3f7;display:grid;place-items:center;color:#627186;flex-shrink:0}.answer.selected{border:2px solid var(--blue);background:var(--blue2)}.answer.correct{border:2px solid var(--green);background:var(--green2)}.answer.wrong{border:2px solid var(--coral);background:var(--coral2)}
+.quizLayout{display:grid;grid-template-columns:1fr 300px;gap:18px}.progress{height:7px;border-radius:9px;background:#e9edf3;overflow:hidden}.progress span{display:block;height:100%;background:var(--blue);width:0;transition:width .25s}
+.reco{border-radius:17px;padding:18px;background:var(--green2);border:1px solid #c9ecd9}.reco.support{background:var(--coral2);border-color:#f7d1cc}.reco.enrich{background:var(--blue2);border-color:#cbdcff}
+.iconBox{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:21px;background:#f0f3f7;margin-bottom:14px}.stat{font-size:29px;font-weight:850;letter-spacing:-1px}.statLabel{font-size:12px;color:var(--muted);margin-top:4px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.statCard{padding:17px;border:1px solid var(--line);border-radius:16px;background:#fff}
+.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:16px;background:white}table{width:100%;border-collapse:collapse;min-width:600px}th,td{text-align:left;padding:14px 16px;border-bottom:1px solid var(--line);font-size:13px}th{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);background:#f8fafc}tr:last-child td{border-bottom:0}
+.rowName{display:flex;align-items:center;gap:10px;font-weight:750}.miniAvatar{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:#edf2fa;font-size:18px}
+.feedbackChoices{display:flex;gap:8px;flex-wrap:wrap}.feedbackChoices button{border:1px solid var(--line);background:#fff;color:var(--muted)}.feedbackChoices button.chosen{border-color:var(--blue);background:var(--blue2);color:var(--blue)}
+input[type=range]{width:100%;accent-color:var(--blue)}.footerNote{margin-top:28px;text-align:center;font-size:11px;color:#8390a0}
+.hidden{display:none!important}.screen{animation:fade .22s ease}@keyframes fade{from{opacity:.25;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media(max-width:800px){.hero,.grid2,.grid3,.quizLayout{grid-template-columns:1fr}.topbar{height:auto;padding:14px 18px;align-items:flex-start;gap:12px;flex-direction:column}.nav{width:100%;overflow:auto}.nav button{white-space:nowrap}.stats{grid-template-columns:1fr 1fr}main{padding:24px 16px}.profileTop{align-items:center}.heroCopy{padding:4px 0}}
+</style>
+</head>
+<body>
+
+<div class="app">
+<header class="topbar">
+  <div class="brand"><div class="logo">↗</div><div>pathways<small>Adaptive learning · concept prototype</small></div></div>
+  <nav class="nav" aria-label="Main navigation">
+    <button class="active" data-view="home">Learner journey</button>
+    <button data-view="teacher">Teacher view</button>
+    <button data-view="about">How it works</button>
+  </nav>
+</header>
+<main>
+<section id="home" class="screen">
+  <div class="hero">
+    <div class="heroCopy">
+      <div class="eyebrow">One platform · Different learning paths</div>
+      <h1>Learning should move at the pace of <span style="color:var(--blue)">understanding.</span></h1>
+      <p>Choose a learner, try a short concept check, and see how the next learning recommendation adapts. This prototype demonstrates the proposed MVP—not a live AI system.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+        <span class="badge blue">✓ Mastery-led</span><span class="badge green">✓ Teacher-supervised</span><span class="badge">✓ Existing content</span>
+      </div>
+    </div>
+    <div class="panel heroPanel">
+      <div class="eyebrow">The adaptive loop</div>
+      <div style="display:grid;gap:10px;margin-top:14px">
+        <div style="display:flex;gap:12px;align-items:center"><div class="iconBox" style="margin:0;background:#eaf1ff">◎</div><div><b>1. Check understanding</b><div class="small muted">A few questions on one concept</div></div></div>
+        <div style="height:1px;background:var(--line);margin-left:21px"></div>
+        <div style="display:flex;gap:12px;align-items:center"><div class="iconBox" style="margin:0;background:#e7f7ef">↗</div><div><b>2. Recommend a next step</b><div class="small muted">Support, enrichment or teacher review</div></div></div>
+        <div style="height:1px;background:var(--line);margin-left:21px"></div>
+        <div style="display:flex;gap:12px;align-items:center"><div class="iconBox" style="margin:0;background:#fff6dc">✓</div><div><b>3. Reassess and adapt</b><div class="small muted">Progress by mastery, not just pace</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sectionHead"><div><h2>Meet the learners</h2><p>Illustrative personas, not permanent student categories.</p></div><span class="badge">Choose a journey →</span></div>
+  <div class="grid2">
+    <article class="card profile" onclick="startJourney('aradhya')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){startJourney('aradhya')}">
+      <div class="profileTop"><div class="avatar ara">🌱</div><div><span class="badge coral">Remediation pathway</span><h2>Aradhya</h2><p class="muted small">“Help me understand it, not just move on.”</p></div></div>
+      <ul><li>May need a different explanation or more practice.</li><li>Needs confidence built through visible progress.</li><li>Success means mastering the concept and continuing independently.</li></ul>
+      <div class="bottom"><span class="small muted">Start with financial literacy</span><button class="coral" onclick="event.stopPropagation();startJourney('aradhya')">Try her journey ↗</button></div>
+    </article>
+    <article class="card profile" onclick="startJourney('arjun')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){startJourney('arjun')}">
+      <div class="profileTop"><div class="avatar arj">🚀</div><div><span class="badge blue">Enrichment pathway</span><h2>Arjun</h2><p class="muted small">“I've got this. What can I discover next?”</p></div></div>
+      <ul><li>Often masters the required material quickly.</li><li>Needs deeper questions and meaningful projects.</li><li>Success means applying and extending understanding.</li></ul>
+      <div class="bottom"><span class="small muted">Start with science exploration</span><button class="primary" onclick="event.stopPropagation();startJourney('arjun')">Try his journey ↗</button></div>
+    </article>
+  </div>
+  <div class="notice" style="margin-top:17px"><strong>Prototype note:</strong> The names and pathways are illustrative. In the proposed product, pathway selection is topic-specific and informed by assessments, teacher observations and student feedback.</div>
+</section>
+
+<section id="quiz" class="screen hidden">
+  <div class="pathline"><span class="step done">Learner</span><span>→</span><span class="step current">Concept check</span><span>→</span><span class="step">Next step</span></div>
+  <div class="eyebrow" id="quizEyebrow">Concept check</div><h1 id="quizTitle">Let's check what you know.</h1>
+  <p class="muted" id="quizIntro">Answer these questions. Your next activity will depend on your answers.</p>
+  <div class="quizLayout" style="margin-top:22px">
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span class="small muted" id="questionCount">Question 1 of 3</span><span class="small muted" id="scorePreview">Take your time</span></div>
+      <div class="progress"><span id="quizProgress" style="width:33%"></span></div>
+      <div class="question" id="questionText"></div>
+      <div class="answers" id="answers"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:10px"><button class="quiet" onclick="goHome()">Exit journey</button><button class="primary" id="nextBtn" disabled onclick="nextQuestion()">Check answer →</button></div>
+      <div id="answerFeedback" class="notice hidden" style="margin-top:14px"></div>
+    </div>
+    <aside class="panel">
+      <div class="iconBox">💡</div><h3>Remember</h3><p class="muted small" id="rememberText">This is a learning check, not a grade.</p>
+      <div class="notice"><strong>Why this matters</strong><br>The prototype uses your answers to recommend a next step. In a real product, a teacher could review uncertain results.</div>
+    </aside>
+  </div>
+</section>
+
+<section id="result" class="screen hidden">
+  <div class="pathline"><span class="step done">Learner</span><span>→</span><span class="step done">Concept check</span><span>→</span><span class="step current">Recommended next step</span></div>
+  <div class="eyebrow">Your next learning step</div><h1 id="resultTitle">A path chosen for your learning.</h1><p class="muted" id="resultIntro"></p>
+  <div class="grid2" style="margin-top:22px;align-items:start">
+    <div class="panel">
+      <span class="badge" id="resultBadge">Recommendation</span><h2 id="recommendationTitle" style="margin-top:14px"></h2>
+      <p id="recommendationBody" class="muted"></p>
+      <div class="reco" id="recommendationCard"><h3 id="activityTitle"></h3><p id="activityBody" class="small"></p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><span class="badge" id="activityType">Approved content</span><span class="badge">Teacher reviewed</span></div></div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:18px"><button class="primary" onclick="showActivity()">Open recommended activity ↗</button><button class="quiet" onclick="goHome()">Try another learner</button></div>
+    </div>
+    <div class="panel">
+      <div class="iconBox">📊</div><h3>What the check suggests</h3>
+      <div class="stats" style="grid-template-columns:1fr 1fr;margin:14px 0"><div class="statCard"><div class="stat" id="scoreValue">2/3</div><div class="statLabel">Correct answers</div></div><div class="statCard"><div class="stat" id="masteryValue">Building</div><div class="statLabel">Provisional status</div></div></div>
+      <p class="small muted">This is a simple demonstration rule, not a validated assessment. In a real pilot, thresholds would be defined per concept and checked for validity.</p>
+      <div style="border-top:1px solid var(--line);padding-top:14px;margin-top:14px"><h3>Share your experience</h3><p class="small muted">How useful was this recommendation?</p><div class="feedbackChoices" id="feedbackChoices"><button onclick="setFeedback(this,'Not useful')">Not useful</button><button onclick="setFeedback(this,'Somewhat useful')">Somewhat useful</button><button onclick="setFeedback(this,'Very useful')">Very useful</button></div><div id="feedbackThanks" class="small muted" style="margin-top:8px"></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="activity" class="screen hidden">
+  <div class="pathline"><span class="step done">Concept check</span><span>→</span><span class="step done">Recommendation</span><span>→</span><span class="step current">Activity preview</span></div>
+  <div class="eyebrow">Recommended learning activity</div><h1 id="activityPageTitle">Let's explore.</h1><p class="muted" id="activityPageIntro"></p>
+  <div class="grid2" style="margin-top:22px">
+    <div class="panel"><div class="iconBox">📚</div><span class="badge green">Illustrative content preview</span><h2 id="activityPageHeading" style="margin-top:12px"></h2><p id="activityPageBody" class="muted"></p><div class="notice"><strong>Learning prompt</strong><br><span id="activityPrompt"></span></div><button class="primary" style="margin-top:17px" onclick="finishActivity()">I've completed this activity ✓</button></div>
+    <div class="panel"><div class="iconBox">🧭</div><h3>What happens next?</h3><p class="muted small">The next step depends on what the learner demonstrates—not simply whether the activity was opened.</p><div class="pathline"><span class="step">Activity</span><span>→</span><span class="step">Recheck mastery</span><span>→</span><span class="step">Adapt again</span></div><div id="activityComplete" class="notice hidden"><strong>Activity marked complete.</strong><br>In a real product, the next step would follow a mastery check and teacher review where needed.</div><button class="secondary" style="margin-top:10px" onclick="goHome()">Return to learner journeys</button></div>
+  </div>
+</section>
+
+<section id="teacher" class="screen hidden">
+  <div class="hero">
+    <div class="heroCopy"><div class="eyebrow">Teacher workspace</div><h1>See progress. Review exceptions.</h1><p>A lightweight view of the learning loop, designed to support teacher judgement—not replace it.</p></div>
+    <div class="panel heroPanel"><span class="badge green">Pilot dashboard · sample data</span><h2 style="margin-top:14px">Class learning pulse</h2><p class="muted small">Illustrative records for a concept-level pilot. Not connected to real students or stored between sessions.</p></div>
+  </div>
+  <div class="stats" style="margin-bottom:22px">
+    <div class="statCard"><div class="stat">6</div><div class="statLabel">Sample learners</div></div>
+    <div class="statCard"><div class="stat">4</div><div class="statLabel">Recommendations accepted</div></div>
+    <div class="statCard"><div class="stat">2</div><div class="statLabel">Need teacher review</div></div>
+  </div>
+  <div class="sectionHead"><div><h2>Recommendations to review</h2><p>Teacher can accept or override a provisional recommendation.</p></div><span class="badge gold">Human oversight</span></div>
+  <div class="tableWrap"><table><thead><tr><th>Learner</th><th>Concept</th><th>Signal</th><th>Suggested next step</th><th>Teacher action</th></tr></thead><tbody id="teacherRows">
+    <tr><td><div class="rowName"><div class="miniAvatar">🌱</div>Aradhya</div></td><td>Needs & wants</td><td><span class="badge coral">1/3 correct</span></td><td>Alternative explanation + guided practice</td><td><button class="secondary" onclick="teacherAction(this,'Accepted')">Accept</button> <button class="quiet" onclick="teacherAction(this,'Changed to teacher review')">Review</button></td></tr>
+    <tr><td><div class="rowName"><div class="miniAvatar">🚀</div>Arjun</div></td><td>Planet scale</td><td><span class="badge blue">3/3 correct</span></td><td>Deeper science exploration</td><td><button class="secondary" onclick="teacherAction(this,'Accepted')">Accept</button> <button class="quiet" onclick="teacherAction(this,'Changed to teacher review')">Review</button></td></tr>
+    <tr><td><div class="rowName"><div class="miniAvatar">🪴</div>Maya</div></td><td>Fractions</td><td><span class="badge gold">Uncertain result</span></td><td>Check for misconception</td><td><button class="secondary" onclick="teacherAction(this,'Accepted')">Accept</button> <button class="quiet" onclick="teacherAction(this,'Changed to teacher review')">Review</button></td></tr>
+  </tbody></table></div>
+  <div class="notice" style="margin-top:16px"><strong>Design principle:</strong> Assessment is the primary signal. Teacher observations and student feedback can refine or override recommendations. A learner can need remediation in one topic and enrichment in another.</div>
+</section>
+
+<section id="about" class="screen hidden">
+  <div class="eyebrow">Product logic</div><h1>Small MVP. Clear learning loop.</h1><p class="muted" style="max-width:780px">The first version tests whether mastery-led recommendations can support different learning needs using existing content and teacher oversight.</p>
+  <div class="grid3" style="margin-top:22px">
+    <div class="card"><div class="iconBox">①</div><h3>Assess</h3><p class="muted small">Use short, concept-aligned checks and define a mastery threshold before launch.</p></div>
+    <div class="card"><div class="iconBox">②</div><h3>Recommend</h3><p class="muted small">Below threshold: remediation. At/above threshold: enrichment or the next learning step. Unclear result: teacher review.</p></div>
+    <div class="card"><div class="iconBox">③</div><h3>Learn and iterate</h3><p class="muted small">Track mastery, meaningful engagement, recommendation quality, teacher effort and stakeholder feedback.</p></div>
+  </div>
+  <div class="sectionHead"><div><h2>What is included in this prototype?</h2><p>Intentionally limited to the agreed MVP.</p></div></div>
+  <div class="grid2">
+    <div class="panel"><h3><span style="color:var(--green)">✓</span> Included</h3><p class="small muted">Learner journeys, short mastery checks, rule-based recommendations, activity previews, teacher review actions and lightweight feedback selection.</p></div>
+    <div class="panel"><h3><span style="color:var(--coral)">↗</span> Deferred</h3><p class="small muted">Interactive AI avatar, AI-generated content, automated teacher incentives, full parent portal, production data integrations and validated learning-effectiveness claims.</p></div>
+  </div>
+  <div class="notice" style="margin-top:18px"><strong>Important:</strong> This is a front-end concept prototype with illustrative questions, content and teacher records. It does not use real student data, connect to school systems, or establish that the approach improves learning. Those questions belong in the proposed feasibility pilot and controlled impact study.</div>
+</section>
+
+<div class="footerNote">PATHWAYS · ISB CDAIO ASSIGNMENT 3.2 · CONCEPT PROTOTYPE</div>
+</main>
+</div>
+<script>
+const state={learner:null,idx:0,answers:[],score:0,feedback:null,recommendation:null};
+const quizzes={
+ aradhya:{
+  eyebrow:"Financial literacy · Needs & wants",
+  title:"Let's explore needs and wants.",
+  intro:"Choose the best answer for each situation. This is practice, not a grade.",
+  remember:"Think about what is essential and what may be a choice.",
+  questions:[
+   {q:"Which is usually a basic need?",opts:["A new video game","Clean drinking water","A shiny toy"],correct:1,explain:"Clean drinking water is essential for health."},
+   {q:"You have money for one item. Which should come first if you have none at home?",opts:["Food for lunch","A collectible sticker","A second toy"],correct:0,explain:"Food is a basic need; the other items are usually wants."},
+   {q:"What is a useful question before buying something?",opts:["Is it the most colourful?","Will my friends buy it?","Do I need it, and can I afford it?"],correct:2,explain:"Thinking about need and affordability helps make a considered choice."}
+  ]
+ },
+ arjun:{
+  eyebrow:"Science · Planet scale",
+  title:"Ready to think bigger?",
+  intro:"Try these science questions. Your next step will respond to the answers.",
+  remember:"Think about scale, evidence and how you could explain your reasoning.",
+  questions:[
+   {q:"Which planet is the largest in our solar system?",opts:["Earth","Jupiter","Mars"],correct:1,explain:"Jupiter is the largest planet in our solar system."},
+   {q:"Why is a scale model useful for showing planet sizes?",opts:["It keeps all planets the same size","It removes the need for evidence","It helps compare sizes using a consistent scale"],correct:2,explain:"A consistent scale makes relative sizes easier to compare."},
+   {q:"If a model uses 1 cm for every 10,000 km, what should a 50,000 km diameter be?",opts:["5 cm","50 cm","0.5 cm"],correct:0,explain:"50,000 divided by 10,000 equals 5 cm."}
+  ]
+ }
+};
+function nav(view){
+ document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+ document.getElementById(view).classList.remove('hidden');
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>nav(b.dataset.view)));
+function startJourney(learner){
+ state.learner=learner;state.idx=0;state.answers=[];state.score=0;state.feedback=null;state.recommendation=null;
+ renderQuestion();nav('quiz');
+}
+function renderQuestion(){
+ const qset=quizzes[state.learner],q=qset.questions[state.idx];
+ document.getElementById('quizEyebrow').textContent=qset.eyebrow;
+ document.getElementById('quizTitle').textContent=qset.title;
+ document.getElementById('quizIntro').textContent=qset.intro;
+ document.getElementById('rememberText').textContent=qset.remember;
+ document.getElementById('questionCount').textContent=`Question ${state.idx+1} of ${qset.questions.length}`;
+ document.getElementById('scorePreview').textContent=state.idx===0?"Take your time":`${state.score} correct so far`;
+ document.getElementById('quizProgress').style.width=`${(state.idx/qset.questions.length)*100}%`;
+ document.getElementById('questionText').textContent=q.q;
+ document.getElementById('answers').innerHTML='';
+ q.opts.forEach((opt,i)=>{
+  const b=document.createElement('button');b.className='answer';b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span><span>${opt}</span>`;
+  b.onclick=()=>selectAnswer(i,b);document.getElementById('answers').appendChild(b);
+ });
+ document.getElementById('nextBtn').disabled=true;document.getElementById('nextBtn').textContent="Check answer →";
+ document.getElementById('answerFeedback').classList.add('hidden');
+}
+function selectAnswer(i,btn){
+ document.querySelectorAll('.answer').forEach(b=>{b.disabled=true});
+ const q=quizzes[state.learner].questions[state.idx];state.answers[state.idx]=i;
+ const correct=i===q.correct;if(correct)state.score++;
+ btn.classList.add(correct?'correct':'wrong');
+ document.querySelectorAll('.answer')[q.correct].classList.add('correct');
+ const f=document.getElementById('answerFeedback');f.classList.remove('hidden');f.innerHTML=`<strong>${correct?'That’s right!':'Let’s learn from it.'}</strong><br>${q.explain}`;
+ document.getElementById('nextBtn').disabled=false;document.getElementById('nextBtn').textContent=state.idx===2?"See my next step →":"Next question →";
+ document.getElementById('quizProgress').style.width=`${((state.idx+1)/3)*100}%`;
+}
+function nextQuestion(){if(state.idx<2){state.idx++;renderQuestion()}else showResult()}
+function showResult(){
+ const learner=state.learner,score=state.score,full=score===3,low=score<=1;
+ let kind;
+ if(learner==='aradhya') kind=score>=2?'enrich':'support';
+ else kind=score===3?'enrich':score<=1?'support':'review';
+ state.recommendation=kind;
+ const configs={
+  support:{badge:"SUPPORT RECOMMENDED",title:"Let's build understanding step by step.",body:"Your answers suggest that another explanation and guided practice may be helpful before moving on.",activity:"Needs and wants: sort and explain",detail:"Use three everyday examples to decide whether each is a need or a want. Explain your choice, then try a short check again.",type:"Guided practice",prompt:"Choose one item you might buy. Is it a need or a want? What makes you say that?",cls:"support"},
+  enrich:{badge:"ENRICHMENT RECOMMENDED",title:"You're ready to explore further.",body:"Your answers suggest you may be ready for a deeper challenge or a real-world application activity.",activity:"Build a planet scale model",detail:"Use a consistent scale to compare planet diameters. Explain what your model shows well—and what it cannot show.",type:"Exploration project",prompt:"How could you design a scale model that shows both planet size and distance? What trade-offs would you make?",cls:"enrich"},
+  review:{badge:"TEACHER REVIEW",title:"Let's check what would help most.",body:"Your result is mixed. A teacher could review your reasoning and feedback before choosing the next step.",activity:"Review one question together",detail:"Talk through the question that felt least clear, then decide whether another explanation or a deeper challenge would be most useful.",type:"Teacher-guided review",prompt:"Which part felt clear, and which part would you like to discuss?",cls:""}
+ };
+ // ensure support/enrich content corresponds to learner
+ if(learner==='aradhya'&&kind==='enrich')configs.enrich={badge:"ENRICHMENT RECOMMENDED",title:"You're ready to apply it.",body:"Your answers suggest you understand needs and wants well and may be ready for a real-world application.",activity:"Plan a small savings goal",detail:"Choose something you want to buy. Work out how much you could save each week and how long it would take. Decide what you would delay or give up.",type:"Application project",prompt:"Which want could you wait for, and how would saving change your choice?",cls:"enrich"};
+ if(learner==='arjun'&&kind==='support')configs.support={badge:"SUPPORT RECOMMENDED",title:"Let's build understanding step by step.",body:"Your answers suggest that another explanation and guided practice may help before moving on to a project.",activity:"Planet sizes: one scale at a time",detail:"Compare Earth and Jupiter using simple pictures, then practise turning a real diameter into a model size using one scale. Try a short check again.",type:"Guided practice",prompt:"If 1 cm stands for 10,000 km, about how many centimetres should Earth's 12,700 km diameter be?",cls:"support"};
+ const cfg=configs[kind];
+ document.getElementById('resultTitle').textContent=learner==='aradhya'?'A next step for your learning.':'A next step for your curiosity.';
+ document.getElementById('resultIntro').textContent=`${learner==='aradhya'?'Aradhya':'Arjun'} · ${quizzes[learner].eyebrow}`;
+ document.getElementById('resultBadge').textContent=cfg.badge;
+ document.getElementById('recommendationTitle').textContent=cfg.title;
+ document.getElementById('recommendationBody').textContent=cfg.body;
+ document.getElementById('activityTitle').textContent=cfg.activity;
+ document.getElementById('activityBody').textContent=cfg.detail;
+ document.getElementById('activityType').textContent=cfg.type;
+ document.getElementById('recommendationCard').className='reco '+cfg.cls;
+ document.getElementById('scoreValue').textContent=`${score}/3`;
+ document.getElementById('masteryValue').textContent=score===3?'Demonstrated':score===2?'Promising':'Not yet shown';
+ document.getElementById('feedbackThanks').textContent='';
+ document.querySelectorAll('#feedbackChoices button').forEach(b=>b.classList.remove('chosen'));
+ state.activityPrompt=cfg.prompt;state.activity=cfg;
+ nav('result');
+}
+function showActivity(){
+ document.getElementById('activityPageTitle').textContent=state.activity.activity;
+ document.getElementById('activityPageIntro').textContent=state.activity.detail;
+ document.getElementById('activityPageHeading').textContent=state.activity.activity;
+ document.getElementById('activityPageBody').textContent=state.activity.detail;
+ document.getElementById('activityPrompt').textContent=state.activity.prompt;
+ document.getElementById('activityComplete').classList.add('hidden');
+ nav('activity');
+}
+function finishActivity(){document.getElementById('activityComplete').classList.remove('hidden');}
+function setFeedback(btn,val){document.querySelectorAll('#feedbackChoices button').forEach(b=>b.classList.remove('chosen'));btn.classList.add('chosen');state.feedback=val;document.getElementById('feedbackThanks').textContent="Thanks — your feedback is recorded for this prototype session.";}
+function goHome(){nav('home')}
+function teacherAction(btn,action){
+ const td=btn.closest('td');td.innerHTML=`<span class="badge ${action==='Accepted'?'green':'gold'}">${action}</span>`;
+}
+</script>
+
+</body>
+</html>
